@@ -28,17 +28,7 @@ public class KafkaConsumerConfig {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "consuming");
 
-        DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
-        Map<String, Class<?>> classMap = new HashMap<>();
-        classMap.put("name.nicholasgribanov.dto.Data", Data.class);
-        typeMapper.setIdClassMapping(classMap);
-        typeMapper.addTrustedPackages("*");
-
-        JsonDeserializer<Data> jsonDeserializer = new JsonDeserializer<>(Data.class);
-        jsonDeserializer.setTypeMapper(typeMapper);
-        jsonDeserializer.setUseTypeMapperForKey(true);
-
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), jsonDeserializer);
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new DataDeserializer());
     }
 
     @Bean
